@@ -1,13 +1,18 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut} from "firebase/auth";
 import { auth } from './firebase-config';
-
+import Background from "./components/Background";
+import { useHistory } from "react-router-dom";
 function LogIn() {
 
     const [registerEmail, setRegisterEmail] = useState("");
     const [registerPassword, setRegisterPassword] = useState("");
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState(""); 
+    const [modal0Display, setModal0Display] = useState(false);
+    const [modal1Display, setModal1Display] = useState(false);
+    const [isLoggedIn, setLoggedIn] = useState(false);
+    const history= useHistory();
     
     function handleChange(event) {
        
@@ -16,7 +21,6 @@ function LogIn() {
                 setRegisterEmail(event.target.value);
                 break;
             case '2': 
-                console.log('password was set')
                 setRegisterPassword(event.target.value);
                 break; 
             case '3': 
@@ -26,14 +30,29 @@ function LogIn() {
                 setLoginPassword(event.target.value);
                 break; 
             default: 
-                console.log("i am not working");
                 break;
         }
         //
     }
+
+    function handleClick(event){
+        if(event.target.name === 'modal0'){
+            setModal0Display(true)
+            setModal1Display(false)
+        } 
+        else if (event.target.name === 'modal1'){
+            setModal1Display(true);
+            setModal0Display(false)
+        }
+        else if (event.target.name === 'backDrop'){
+            setModal0Display(false)
+            setModal1Display(false);
+        }
+    }
+
+
     
     const register = async () => {
-        
         createUserWithEmailAndPassword(
                 auth, 
                 registerEmail,
@@ -58,6 +77,7 @@ function LogIn() {
             registerPassword
         ).then ((userCredential) => {
             const user = userCredential.user;
+            history.push('/app');
         }).catch ((error)=> {
             const errorCode = error.code;
             const errorMessage= error.message;
@@ -67,29 +87,48 @@ function LogIn() {
 
     const logout = async() => {
         signOut(auth).then(() => {
-            console.log('signed out!');
+            setModal1Display(true)
+            history.push('/')
         }).catch((error) => {
             console.log(error.message)
         })
     }
 
     return (
-        <div className="LogIn">
-            <div className="register">
-                <label> <h3>Register</h3>
-                    <input type="email" placeholder="Email..." name='1' onChange={handleChange}></input>
-                    <input type="password" placeholder="Password" name='2' onChange={handleChange}></input>
-                </label>
-                <button onClick={()=> {register()}}>Create User</button>
-            </div>
-            <div className="returningUser">
-                <label><h3> Log In </h3>
-                    <input type="email" placeholder="Email" name='3' ></input>
-                    <input type="password" placeholder="Password" name='4' ></input>
-                </label>
-                <button onClick={()=> {login()}}>Sign In</button>
-            </div>
+        <div className="LogIn" name='backDrop' onClick={handleClick}>
+          
+            { //we need to style all of this eventually
+                modal0Display &&  <div className="register">
+                                    <label> <h3>Register</h3>
+
+                                                 <input type="email" placeholder="Email..." name='1' onChange={handleChange}></input>
+                                                 <br/>
+                                                 <input type="password" placeholder="Password" name='2' onChange={handleChange}></input>
+                                                    <br/>
+                                        
+                                    </label>    
+                                    <button className="frontPg" onClick={()=> {register()}}>Create User</button>
+                                    <button className="frontPg" name='modal1' onClick={handleClick}>Returning User</button>
+                                       
+                                </div>
+            }
+            {
+                modal1Display && <div className="register">
+                                    <label><h3> Log In </h3>
+                                        <input type="email" placeholder="Email" name='3' ></input>
+                                        <br/>
+                                        <input type="password" placeholder="Password" name='4' ></input>
+                                        <br/>
+                                    </label>
+                                    
+                                    <button className="frontPg" onClick={()=> {login()}}>Sign In</button>                
+                                    <button className="frontPg" name='modal0' onClick={handleClick}>New User</button>
+                                </div>
+            }
+           
+            
         <button onClick={()=> {logout()}}>Sign out</button>
+        
         </div>
     )
 }

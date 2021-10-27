@@ -36,3 +36,34 @@
     transform: rotate(360deg);
   }
 }
+
+.bg{
+  opacity: 0.5;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: auto;
+  background-size: cover;
+}
+
+
+.LogIn {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+
+}
+
+
+
+.register {
+  padding: 20px;
+  margin: 20px;
+  position: relative;
+  color: whitesmoke;
+  width: 220px;
+
+}
