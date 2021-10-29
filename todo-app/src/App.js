@@ -8,14 +8,15 @@ function App() {
 
   const [example, setExample] = useState();
 
-
+//   <Route exact path="/" component={LogIn}/>
   //tomorrow, we need to set up the routing of this app.
     return(
       <div> 
         <BrowserRouter>
           <Switch> 
-              <Route exact path="/" component={LogIn}/>
+           
               <Route exact path="/app" component={Todoist}/>
+              <Route exact path="/login" component={LogIn}/>
           </Switch>
        
         </BrowserRouter>
