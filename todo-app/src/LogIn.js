@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut} from "firebase/auth";
 import { auth } from './firebase-config';
-import Background from "./components/Background";
+import Background from "./Background";
 import { useHistory } from "react-router-dom";
 function LogIn() {
 
@@ -61,7 +61,6 @@ function LogIn() {
                 const user = userCredential.user;
                 setLoginEmail(registerEmail)
                 setLoginPassword(registerPassword)
-                console.log(user)
             }).catch ((error) => {
                 const errorCode = error.code;
                 const errorMessage= error.message;
@@ -77,6 +76,8 @@ function LogIn() {
             registerPassword
         ).then ((userCredential) => {
             const user = userCredential.user;
+            console.log(user)
+            console.log(user.uid)
             history.push('/app');
         }).catch ((error)=> {
             const errorCode = error.code;
@@ -88,7 +89,7 @@ function LogIn() {
     const logout = async() => {
         signOut(auth).then(() => {
             setModal1Display(true)
-            history.push('/')
+
         }).catch((error) => {
             console.log(error.message)
         })

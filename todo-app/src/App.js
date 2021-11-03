@@ -1,9 +1,9 @@
 import './App.css';
-import Background from './components/Background';
+import Background from './Background';
 import React, { useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import LogIn from './LogIn';
-import Todoist from './components/Todoist';
+import Todoist from './Todoist';
 function App() {
 
   const [example, setExample] = useState();
